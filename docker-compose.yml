@@ -1,0 +1,14 @@
+version: "3.9"
+
+services:
+  redis:
+    image: redis/redis-stack:latest
+    hostname: kwork_notifier-redis
+    restart: always
+    ports:
+      - "6379:6379"
+      - "8001:8001"
+    environment:
+      - REDIS_ARGS=--save 60 1
+    volumes:
+      - ~/volumes/kwork_notifier/redis_data:/data

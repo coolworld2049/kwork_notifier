@@ -15,7 +15,7 @@ class ACLMiddleware(BaseMiddleware):
         data: Dict[str, Any],
     ) -> Any:
         user: User = data.get("event_from_user")
-        if user.id not in settings.BOT_ACL_USER_IDS:
-            logger.info(f"Access denied. User: {user.model_dump_json()}")
+        if settings.BOT_ACL_ENABLED and user.id not in settings.BOT_ACL_USER_IDS:
+            logger.warning(f"Access denied. User: {user.model_dump_json()}")
             return None
         return await handler(event, data)

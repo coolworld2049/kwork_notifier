@@ -67,18 +67,6 @@ def configure_logging(log_leve: str) -> None:  # pragma: no cover
     logging.basicConfig(handlers=[intercept_handler], level=logging.NOTSET)
     logger.remove()
     logger.add(
-        "logs/access.log",
-        serialize=False,
-        level=log_leve,
-        enqueue=True,
-        backtrace=True,
-        diagnose=True,
-        encoding="UTF-8",
-        rotation="32 MB",
-        retention="14 days",
-        compression="zip",
-    )
-    logger.add(
         sys.stdout,
         level=log_leve,
         format=record_formatter,

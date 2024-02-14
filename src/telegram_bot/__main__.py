@@ -11,6 +11,7 @@ from _logging import configure_logging
 from telegram_bot.middlewares.acl import ACLMiddleware
 from telegram_bot.middlewares.retry_request import RetryRequestMiddleware
 from telegram_bot.routers import main_router
+from telegram_bot.services.apscheduler import scheduler
 from telegram_bot.settings import Settings
 from telegram_bot.settings import settings
 
@@ -59,6 +60,7 @@ async def main():
 
     dp = Dispatcher()
     dp["settings"] = settings
+    dp["scheduler"] = scheduler
 
     dp.startup.register(on_startup)
     dp.shutdown.register(on_shutdown)
@@ -66,11 +68,8 @@ async def main():
     dp.include_router(main_router)
 
     dp.callback_query.middleware(CallbackAnswerMiddleware())
-    if settings.BOT_ACL_ENABLED:
-        dp.update.middleware(ACLMiddleware())
+    dp.update.middleware(ACLMiddleware())
 
-    scheduler = AsyncIOScheduler()
-    dp["scheduler"] = scheduler
     await dp.start_polling(bot)
 
 

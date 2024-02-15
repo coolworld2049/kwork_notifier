@@ -1,0 +1,28 @@
+version: "3.9"
+
+services:
+  redis:
+    image: redis/redis-stack:latest
+    hostname: kwork_notifier-redis
+    restart: always
+    ports:
+      - "6379:6379"
+      - "8001:8001"
+    environment:
+      - REDIS_ARGS=--save 60 1
+    volumes:
+      - ~/volumes/kwork_notifier/redis_data:/data
+  kwork_notifier:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    hostname: kwork_notifier
+    restart: no
+    environment:
+      - TZ=Europe/Moscow
+      - REDIS_HOST=kwork_notifier-redis
+      - SCHEDULE_PARSE_KWORK_MINUTES=${SCHEDULE_PARSE_KWORK_MINUTES}
+    env_file:
+      - .env
+    depends_on:
+      - redis

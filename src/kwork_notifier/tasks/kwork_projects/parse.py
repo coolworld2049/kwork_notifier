@@ -5,6 +5,7 @@ from datetime import timedelta
 from aiogram.types import InlineKeyboardButton
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 from cashews import cache
+from loguru import logger
 from selectolax.lexbor import LexborHTMLParser
 
 from kwork_api_client.kwork import Kwork
@@ -25,13 +26,20 @@ async def parse_kwork_projects():
     token = await kwork.token
 
     categories_ids = settings.KWORK_CATEGORIES
-
+    api_request_params = {
+        "price_from": settings.KWORK_PRICE_FROM,
+        "price_to": settings.KWORK_PRICE_TO,
+        "hiring_from": settings.KWORK_HIRING_FROM,
+        "kworks_filter_from": settings.KWORK_KWORKS_FILTER_TO,
+        "kworks_filter_to": settings.KWORK_KWORKS_FILTER_TO,
+    }
     raw_projects = await kwork.api_request(
         method="post",
         api_method="projects",
         categories=categories_ids,
         page=1,
         token=token,
+        **api_request_params,
     )
 
     success = raw_projects["success"]
@@ -54,16 +62,20 @@ async def parse_kwork_projects():
             categories=categories_ids,
             page=page,
             token=token,
+            **api_request_params,
         )
 
         projects.extend(get_projects(other_projects["response"]))
 
+    sent_projects_count = 0
+    cached_projects_count = 0
     for project in projects:
         project.description = LexborHTMLParser(project.description).text(
             separator="\n", strip=True
         )
         is_project_cached = await cache.get(f"kwork_project:{project.id}")
         if is_project_cached:
+            cached_projects_count += 1
             continue
         inline_keyboard = InlineKeyboardBuilder()
         inline_keyboard.add(
@@ -82,7 +94,12 @@ async def parse_kwork_projects():
             value=project,
             expire=timedelta(hours=6).seconds,
         )
+        sent_projects_count += 1
         await asyncio.sleep(random.choice([1, 2, 3]))
+
+    logger.info(
+        f"sent_projects_count={sent_projects_count} cached_projects_count={cached_projects_count}"
+    )
 
     await kwork.close()
 

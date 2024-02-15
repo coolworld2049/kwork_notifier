@@ -25,6 +25,12 @@ class KworkSettings(BaseSettings):
     KWORK_PHONE_LAST: str
     KWORK_CATEGORIES: list[int]
 
+    KWORK_PRICE_FROM: int | None = None
+    KWORK_PRICE_TO: int | None = None
+    KWORK_HIRING_FROM: int | None = None
+    KWORK_KWORKS_FILTER_FROM: int | None = None
+    KWORK_KWORKS_FILTER_TO: int | None = None
+
 
 class ScheduleSettings(BaseSettings):
     SCHEDULE_PARSE_KWORK_MINUTES: int = 10

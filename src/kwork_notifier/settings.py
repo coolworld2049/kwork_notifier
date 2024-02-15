@@ -16,18 +16,21 @@ class RedisSettings(BaseSettings):
 
 class BotSettings(BaseSettings):
     BOT_TOKEN: str
-    BOT_ACL_USER_IDS: list[int] = []
-    BOT_ACL_ENABLED: bool = True
+    BOT_NOTIFY_USER_ID: int
 
 
 class KworkSettings(BaseSettings):
     KWORK_LOGIN: str
     KWORK_PASSWORD: str
-    KWORK_PHONE_LAST: int
-    KWORK_CATEGORIES: list[int] = [41, 255]
+    KWORK_PHONE_LAST: str
+    KWORK_CATEGORIES: list[int]
 
 
-class Settings(RedisSettings, BotSettings, KworkSettings):
+class ScheduleSettings(BaseSettings):
+    SCHEDULE_PARSE_KWORK_MINUTES: int = 10
+
+
+class Settings(RedisSettings, BotSettings, KworkSettings, ScheduleSettings):
     LOG_LEVEL: str = "INFO"
 
 

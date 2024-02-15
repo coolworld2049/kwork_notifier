@@ -3,7 +3,7 @@ from typing import Optional, Any, Dict
 from jinja2 import Environment, PackageLoader, select_autoescape
 
 env = Environment(
-    loader=PackageLoader("telegram_bot", "templates"),
+    loader=PackageLoader("kwork_notifier", "templates"),
     autoescape=select_autoescape(["html"]),
 )
 

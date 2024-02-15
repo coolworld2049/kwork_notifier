@@ -2,9 +2,9 @@ from typing import List, Optional
 
 from pydantic import BaseModel
 
-from kwork.types.achievement import Achievement
-from kwork.types.kwork_object import KworkObject
-from kwork.types.review import Review
+from kwork_api_client.types.achievement import Achievement
+from kwork_api_client.types.kwork_object import KworkObject
+from kwork_api_client.types.review import Review
 
 
 class User(BaseModel):

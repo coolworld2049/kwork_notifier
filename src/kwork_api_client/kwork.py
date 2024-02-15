@@ -1,18 +1,14 @@
-import collections
 import logging
 import urllib.parse
 from typing import Optional, Union
 
 import aiohttp
-from kwork_api_client.exceptions import KworkException
 
+from kwork_api_client.exceptions import KworkException
 from kwork_api_client.types import Actor
 from kwork_api_client.types.all import *
 
 logger = logging.getLogger(__name__)
-Handler = collections.namedtuple(
-    "Handler", ["func", "text", "on_start", "text_contains"]
-)
 
 
 class Kwork:

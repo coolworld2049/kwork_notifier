@@ -5,7 +5,7 @@ from typing import Optional, Union
 import aiohttp
 
 from kwork_api_client.exceptions import KworkException
-from kwork_api_client.types import Actor
+from kwork_api_client.types import *
 from kwork_api_client.types.all import *
 
 logger = logging.getLogger(__name__)

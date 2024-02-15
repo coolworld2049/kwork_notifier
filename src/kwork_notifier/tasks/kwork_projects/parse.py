@@ -15,7 +15,7 @@ from kwork_notifier.settings import settings
 from kwork_notifier.template_engine import render_template
 
 
-async def parse_kwork_projects():
+async def parse_kwork_projects(check_if_project_cached: bool = True):
     if not cache.is_setup():
         cache.setup(settings_url=settings.redis_url)
     kwork = Kwork(
@@ -74,7 +74,7 @@ async def parse_kwork_projects():
             separator="\n", strip=True
         )
         is_project_cached = await cache.get(f"kwork_project:{project.id}")
-        if is_project_cached:
+        if check_if_project_cached and is_project_cached:
             cached_projects_count += 1
             continue
         inline_keyboard = InlineKeyboardBuilder()
@@ -82,11 +82,15 @@ async def parse_kwork_projects():
             InlineKeyboardButton(
                 text="Send offer",
                 url=project.offer_url,
-            )
+            ),
+            InlineKeyboardButton(
+                text="User profile",
+                url=project.customer_url,
+            ),
         )
         await bot.send_message(
             chat_id=settings.BOT_NOTIFY_USER_ID,
-            text=render_template("project.html", project=project.model_dump()),
+            text=render_template("project.html", project=project),
             reply_markup=inline_keyboard.as_markup(),
         )
         await cache.set(
@@ -105,4 +109,4 @@ async def parse_kwork_projects():
 
 
 if __name__ == "__main__":
-    asyncio.run(parse_kwork_projects())
+    asyncio.run(parse_kwork_projects(check_if_project_cached=False))

@@ -2,8 +2,8 @@
 <b></b>
 {{project.description}}
 <b></b>
-Price — {{project.price}} to {{project.possible_price_limit}}
+Price — {{project.price}}
+Possible price — {{project.possible_price_limit}}
 Offers — {{project.offers}}
-Time left — {{project.time_left_datetime}}
-Date confirm — {{project.date_confirm_datetime}}
-Customer — <a href="https://kwork.ru/user/{{ project.username }}">{{project.username}}</a>
+Time left — {{project.time_left_datetime.time()}}
+Date confirm — {{project.date_confirm_datetime.time()}}

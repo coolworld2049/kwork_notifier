@@ -10,7 +10,7 @@ COPY pyproject.toml poetry.lock ./
 
 RUN poetry install --only main
 
-COPY src ./
+COPY kwork_notifier ./
 
 FROM build as app
 

@@ -37,14 +37,14 @@ class Project(BaseModel):
     def offer_url(self):
         return f"https://kwork.ru/new_offer?project={self.id}"
 
-    @classmethod
-    def __convert_to_datetime(cls, timestamp: float):
-        return datetime.fromtimestamp(timestamp, tz=utc)
+    @property
+    def customer_url(self):
+        return f"https://kwork.ru/user/{self.username}"
 
     @property
     def time_left_datetime(self):
-        return self.__convert_to_datetime(float(self.time_left))
+        return datetime.fromtimestamp(float(self.time_left), tz=utc)
 
     @property
     def date_confirm_datetime(self):
-        return self.__convert_to_datetime(float(self.date_confirm))
+        return datetime.fromtimestamp(float(self.date_confirm), tz=utc)
